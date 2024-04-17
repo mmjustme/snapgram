@@ -1,9 +1,21 @@
-import React from 'react'
+import React from "react";
+
+import { Button } from "@/components/ui/button";
+
+function Home() {
+  return (
+    <div>
+      <Button>Click me</Button>
+    </div>
+  );
+}
 
 const AuthLayout = () => {
   return (
-    <div>AuthLayout</div>
-  )
-}
+    <div>
+      <Home />
+    </div>
+  );
+};
 
-export default AuthLayout
+export default AuthLayout;
