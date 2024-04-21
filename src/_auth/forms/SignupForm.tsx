@@ -41,9 +41,9 @@ const SignupForm = () => {
   return (
     <Form {...form}>
       <div className="sm-w-420 flex-center flex-col ">
-        {/* todo change url */}
+       
         <img
-          src="https://raw.githubusercontent.com/adrianhajdin/social_media_app/9fa032dd198c92aa498db82d248c0d93f28ebf5c/public/assets/images/logo.svg"
+          src="/assets/images/logo.svg"
           alt="logo"
         />
 
