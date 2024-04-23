@@ -15,12 +15,15 @@ import { Input } from "@/components/ui/input";
 import { SignupValidaton } from "@/lib/validation";
 import Loader from "@/components/shared/Loader";
 import { Link } from "react-router-dom";
-import { createUserAccount } from "@/lib/appwrite/api";
 import { useToast } from "@/components/ui/use-toast";
+import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queries";
 
 const SignupForm = () => {
   const { toast } = useToast();
-  const isLoading = false;
+
+  // react-query mutation fn call
+  const { mutateAsync: createUserAccount, isPending: isCreatingUser } = useCreateUserAccount()
+  const { mutateAsync: signInAccount, isPending: isSigningIn } = useSignInAccount()
 
   // shsdcn form - define form and validation
   const form = useForm<z.infer<typeof SignupValidaton>>({
@@ -35,6 +38,9 @@ const SignupForm = () => {
 
   // shsdcn form - Define a submit handler.
   async function onSubmit(values: z.infer<typeof SignupValidaton>) {
+    // so now we call createUserAccount throw the useCreateUserAccount
+    // and useCreateUserAccount call createUserAccount from appwrite/api
+    // it's mean react-query create a level between appwrite and "SignupForm"
     const newUser = await createUserAccount(values);
 
     if (!newUser) {
@@ -42,7 +48,17 @@ const SignupForm = () => {
       return toast({ title: "Sign up failed. Please try again" });
     }
 
-    // const session = await signInAccaunt()
+    const session = await signInAccount({
+      email: values.email,
+      password: values.password
+    })
+
+    if (!session) {
+      // If we failed to create user we'll see a toast
+      return toast({ title: "Sign up failed. Please try again" });
+    }
+
+    
   }
 
   return (
@@ -114,7 +130,7 @@ const SignupForm = () => {
             )}
           />
           <Button type="submit" className="shad-button_primary">
-            {isLoading ? (
+            {isCreatingUser ? (
               <div className="flex-center gap-2">
                 <Loader /> Loading..
               </div>
