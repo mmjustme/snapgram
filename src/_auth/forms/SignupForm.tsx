@@ -14,12 +14,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { SignupValidaton } from "@/lib/validation";
 import Loader from "@/components/shared/Loader";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queries";
+import { useUserContext } from "@/context/AuthContext";
 
 const SignupForm = () => {
   const { toast } = useToast();
+  const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
+  const navigate = useNavigate();
 
   // react-query mutation fn call
   const { mutateAsync: createUserAccount, isPending: isCreatingUser } = useCreateUserAccount()
@@ -55,6 +58,16 @@ const SignupForm = () => {
 
     if (!session) {
       // If we failed to create user we'll see a toast
+      return toast({ title: "Sign up failed. Please try again" });
+    }
+
+    // call and we get back boolean vaue
+    // and if it's true we're goin to Home page
+    const isLoggedIn = await checkAuthUser();
+    if (isLoggedIn) {
+      form.reset();
+      navigate("/");
+    } else {
       return toast({ title: "Sign up failed. Please try again" });
     }
 
