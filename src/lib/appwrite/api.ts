@@ -2,7 +2,6 @@ import { INewUser } from "@/types";
 import { account, appwriteConfig, avatars, databases } from "./config";
 import { ID, Query } from "appwrite";
 
-
 // create user
 export async function createUserAccount(user: INewUser) {
   try {
@@ -59,15 +58,13 @@ export async function saveUserToDB(user: {
   }
 }
 
-
-export async function signInAccount(user: { email: string, password: string }) {
+export async function signInAccount(user: { email: string; password: string }) {
   try {
-    const session = await account.createEmailSession(user.email, user.password)
+    const session = await account.createEmailSession(user.email, user.password);
 
-    return session
+    return session;
   } catch (error) {
     console.log(error);
-
   }
 }
 
@@ -90,5 +87,16 @@ export async function getCurrentUser() {
     return getCurrentUser.documents[0];
   } catch (error) {
     console.log(error, "!");
+  }
+}
+
+// signOut
+export async function signOutAccount() {
+  try {
+    const session = await account.deleteSession("current");
+
+    return session;
+  } catch (error) {
+    console.log(error);
   }
 }
