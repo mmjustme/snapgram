@@ -19,7 +19,7 @@ const formSchema = z.object({
   username: z.string().min(2).max(50),
 })
 
-const PostForm = () => {
+const PostForm = ({post}) => {
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -59,7 +59,7 @@ const PostForm = () => {
             <FormItem>
               <FormLabel className="shad-form_label">Add Photos</FormLabel>
               <FormControl>
-                <FileUploader />
+                <FileUploader fieldChange={field.onChange} mediaUrl={post?.imageUrl}/>
               </FormControl>
               <FormMessage className="shad-form_message" />
             </FormItem>
