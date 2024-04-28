@@ -5,11 +5,13 @@ import {
   useInfiniteQuery,
 } from "@tanstack/react-query";
 import {
+  CreatePost,
   createUserAccount,
   signInAccount,
   signOutAccount,
 } from "../appwrite/api";
-import { INewUser } from "@/types";
+import { INewPost, INewUser } from "@/types";
+import { QUERY_KEYS } from "./queryKeys";
 // Main purpose lib are useQueries - fetching data, useMutation - modifing data, autocahsing data
 
 // initialize new mutate fn and react-query know about createUserAccount fn
@@ -31,3 +33,19 @@ export const useSignOutAccount = () => {
     mutationFn: signOutAccount,
   });
 };
+
+export const useCreatePost = () => {
+  // exept create post we need also query all existing posts
+  // by queryClient to show them on the home page
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (post:INewPost)=>CreatePost(post),
+    onSuccess:()=>{
+      // invalidateQueries help us fetch data from server (not cashing)
+      // and that's how we get new post and keep home page with recents posts first
+      queryClient.invalidateQueries({
+        queryKey:[QUERY_KEYS.GET_RECENT_POSTS]
+      })
+    }
+  });
+}
