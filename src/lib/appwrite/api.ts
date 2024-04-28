@@ -156,8 +156,7 @@ export async function uploadFile(file: File) {
       appwriteConfig.storageId,
       ID.unique(),
       file
-    )
-    console.log(uploadedFile,"@@@@");
+    )   
 
     return uploadedFile
   } catch (error) {
@@ -177,9 +176,7 @@ export function getFilePreview(fileId: string) {
       100
     )
 
-    if (!fileUrl) throw Error;
-    console.log(fileUrl);
-    
+    if (!fileUrl) throw Error;  
 
     return fileUrl
   } catch (error) {
