@@ -9,19 +9,20 @@ const Home = () => {
     isPending: isPostLoading,
     isError: isErrorPosts,
   } = useGetRecentPosts();
-  console.log(posts);
 
   return (
     <div className="flex flex-1">
       <div className="home-container">
-        <div className="gome-posts">
+        <div className="home-posts">
           <h2 className="h3-bold md:h2-bold text-left w-full">Home Feed</h2>
           {isPostLoading && !posts ? (
             <Loader />
           ) : (
-            <ul className="flex flex-col flex-1 gap-0 w-full">
+            <ul className="flex flex-col flex-1 gap-9 w-full">
               {posts?.documents.map((post: Models.Document) => (
-                <PostCard post={post} />
+                <li className="flex justify-center w-full" key={post.caption}>
+                  <PostCard post={post} />
+                </li>
               ))}
             </ul>
           )}
