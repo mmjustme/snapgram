@@ -101,28 +101,25 @@ export async function signOutAccount() {
   }
 }
 
-
 export async function CreatePost(post: INewPost) {
   try {
     // 1.Upload img to storge, fn descr.below
-    const uploadedFile = await uploadFile(post.file[0])
+    const uploadedFile = await uploadFile(post.file[0]);
 
-    if (!uploadedFile) throw Error    
-    
+    if (!uploadedFile) throw Error;
+
     // 2.Get File URL, fn descr.below
-    const fileUrl = getFilePreview(uploadedFile.$id)    
-    
-    
+    const fileUrl = getFilePreview(uploadedFile.$id);
+
     // if sm go wrong we need also delete file and show Error
     if (!fileUrl) {
-      await deleteFile(uploadedFile.$id)     
-      throw Error
+      await deleteFile(uploadedFile.$id);
+      throw Error;
     }
 
     // 3.Convert tags in to array
     // replace(/ /g,'') - find and replace space with empty sttring
-    const tags = post.tags?.replace(/ /g, '').split(',') || []
-    
+    const tags = post.tags?.replace(/ /g, "").split(",") || [];
 
     // 4. Save post in DB
     const newPost = await databases.createDocument(
@@ -135,16 +132,16 @@ export async function CreatePost(post: INewPost) {
         imageUrl: fileUrl,
         ImageId: uploadedFile.$id,
         location: post.location,
-        tags: tags
-      }
-    )
+        tags: tags,
+      },
+    );
 
     if (!newPost) {
-      await deleteFile(uploadedFile.$id)     
-      throw Error
+      await deleteFile(uploadedFile.$id);
+      throw Error;
     }
-    
-    return newPost
+
+    return newPost;
   } catch (error) {
     console.log(error);
   }
@@ -155,10 +152,10 @@ export async function uploadFile(file: File) {
     const uploadedFile = await storage.createFile(
       appwriteConfig.storageId,
       ID.unique(),
-      file
-    )   
+      file,
+    );
 
-    return uploadedFile
+    return uploadedFile;
   } catch (error) {
     console.log(error);
   }
@@ -172,13 +169,13 @@ export function getFilePreview(fileId: string) {
       // width & heigh & position & quality
       2000,
       2000,
-      'top',
-      100
-    )
+      "top",
+      100,
+    );
 
-    if (!fileUrl) throw Error;  
+    if (!fileUrl) throw Error;
 
-    return fileUrl
+    return fileUrl;
   } catch (error) {
     console.log(error);
   }
@@ -186,10 +183,22 @@ export function getFilePreview(fileId: string) {
 
 export async function deleteFile(fileId: string) {
   try {
-    await storage.deleteFile(appwriteConfig.storageId, fileId)
+    await storage.deleteFile(appwriteConfig.storageId, fileId);
 
-    return { status: "ok" }
+    return { status: "ok" };
   } catch (error) {
     console.log(error);
   }
+}
+
+export async function getRecentPosts() {
+  const posts = await databases.listDocuments(
+    appwriteConfig.databaseId,
+    appwriteConfig.postCollectionId,
+    [Query.orderDesc("$createdAt"), Query.limit(20)],
+  );
+
+  if (!posts) throw Error;
+
+  return posts;
 }
