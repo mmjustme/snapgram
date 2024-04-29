@@ -3,10 +3,12 @@ import {
   useMutation,
   useQueryClient,
   useInfiniteQuery,
+  useQuery,
 } from "@tanstack/react-query";
 import {
   CreatePost,
   createUserAccount,
+  getRecentPosts,
   signInAccount,
   signOutAccount,
 } from "../appwrite/api";
@@ -37,15 +39,22 @@ export const useSignOutAccount = () => {
 export const useCreatePost = () => {
   // exept create post we need also query all existing posts
   // by queryClient to show them on the home page
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (post:INewPost)=>CreatePost(post),
-    onSuccess:()=>{
+    mutationFn: (post: INewPost) => CreatePost(post),
+    onSuccess: () => {
       // invalidateQueries help us fetch data from server (not cashing)
       // and that's how we get new post and keep home page with recents posts first
       queryClient.invalidateQueries({
-        queryKey:[QUERY_KEYS.GET_RECENT_POSTS]
-      })
-    }
+        queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
+      });
+    },
   });
-}
+};
+
+export const useGetRecentPosts = () => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
+    queryFn: getRecentPosts,
+  });
+};
