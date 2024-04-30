@@ -144,7 +144,7 @@ export const useDeleteSavedPost = () => {
   });
 };
 export const useGetCurrentUser = () => {
-  return useQueries({
+  return useQuery({
     queryKey: [QUERY_KEYS.GET_CURRENT_USER],
     queryFn: getCurrentUser,
   });
