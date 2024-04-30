@@ -8,7 +8,11 @@ import {
 import {
   CreatePost,
   createUserAccount,
+  deleteSavedPost,
+  getCurrentUser,
   getRecentPosts,
+  likePost,
+  savePost,
   signInAccount,
   signOutAccount,
 } from "../appwrite/api";
@@ -56,5 +60,92 @@ export const useGetRecentPosts = () => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
     queryFn: getRecentPosts,
+  });
+};
+
+export const useLikePost = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      postId,
+      likesArray,
+    }: {
+      postId: string;
+      likesArray: string[];
+    }) => likePost(postId, likesArray),
+    onSuccess: (data) => {
+      // after like post we need also update likes when click on the post to see post details.
+      // this additional step caused by cashing data - this reduce time to load page
+      // but contain old data that's why we need update data in the next step - post details.
+      // it is call invalidate data.
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.id],
+      });
+      // and, of course, other data update
+      // recenet posts - home page
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
+      });
+      // posts in gneral - explore page
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_POSTS],
+      });
+      // user - profile page
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+      });
+    },
+  });
+};
+
+export const useSavePost = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ postId, userId }: { postId: string; userId: string }) =>
+      savePost(postId, userId),
+    onSuccess: (data) => {
+      // recenet posts - home page
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
+      });
+      // posts in gneral - explore page
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_POSTS],
+      });
+      // user - profile page
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+      });
+    },
+  });
+};
+
+export const useDeleteSavedPost = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (savedRecordId: string) => deleteSavedPost(savedRecordId),
+    onSuccess: (data) => {
+      // recenet posts - home page
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
+      });
+      // posts in gneral - explore page
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_POSTS],
+      });
+      // user - profile page
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+      });
+    },
+  });
+};
+export const useGetCurrentUser = () => {
+  return useQueries({
+    queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+    queryFn: getCurrentUser,
   });
 };
