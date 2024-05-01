@@ -38,7 +38,7 @@ const PostForm = ({ post }: PostFormProps) => {
       caption: post ? post?.caption : '',
       file: [],
       location: post ? post?.location : '',
-      tags: post ? post?.tags.loin(",") : '',
+      tags: post ? post?.tags.join(",") : '',
     },
   })
 
