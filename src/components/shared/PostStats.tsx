@@ -1,4 +1,3 @@
-
 import {
   useDeleteSavedPost,
   useGetCurrentUser,
@@ -24,16 +23,19 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
 
   const { mutate: likePost } = useLikePost();
   const { mutate: savePost, isPending: isSavingPost } = useSavePost();
-  const { mutate: deleteSavedPost, isPending: isDeletingSaved } = useDeleteSavedPost();
+  const { mutate: deleteSavedPost, isPending: isDeletingSaved } =
+    useDeleteSavedPost();
 
   const { data: currentUser } = useGetCurrentUser();
+  console.log(currentUser, "@");
 
   const savePostRecord = currentUser?.save.find(
-    (record: Models.Document) => record.post.$id === post.$id);
+    (record: Models.Document) => record.post.$id === post.$id,
+  );
 
   useEffect(() => {
-    setIsSaved(!!savePostRecord)
-  }, [currentUser])
+    setIsSaved(!!savePostRecord);
+  }, [currentUser]);
 
   const handleLikePost = (e: React.MouseEvent) => {
     // help click only like and not any further (post details)
@@ -82,14 +84,18 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
       </div>
 
       <div className="flex gap-2">
-      {isSavingPost || isDeletingSaved ? <Loader /> : <img
-          src={isSaved ? "/assets/icons/saved.svg" : "/assets/icons/save.svg"}
-          alt="like"
-          width={20}
-          height={20}
-          onClick={handleSavePost}
-          className="cursor-pointer"
-        />}
+        {isSavingPost || isDeletingSaved ? (
+          <Loader />
+        ) : (
+          <img
+            src={isSaved ? "/assets/icons/saved.svg" : "/assets/icons/save.svg"}
+            alt="like"
+            width={20}
+            height={20}
+            onClick={handleSavePost}
+            className="cursor-pointer"
+          />
+        )}
       </div>
     </div>
   );
