@@ -48,7 +48,7 @@ const PostCard = ({ post }: PostCardProps) => {
           <img src="/assets/icons/edit.svg" width={20} height={20} alt="edit" />
         </Link>
       </div>
-      <Link to={`/post/${post.id}`}>
+      <Link to={`/post/${post.$id}`}>
         <div className="small-medium lg:base-medium py-5">
           <p>{post.caption}</p>
           <ul className="flex gap-1  mt-2">
