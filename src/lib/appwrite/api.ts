@@ -1,4 +1,4 @@
-import { INewPost, INewUser } from "@/types";
+import { INewPost, INewUser, IUpdatePost } from "@/types";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
 import { ID, Query } from "appwrite";
 
@@ -130,7 +130,7 @@ export async function CreatePost(post: INewPost) {
         creator: post.userId,
         caption: post.caption,
         imageUrl: fileUrl,
-        ImageId: uploadedFile.$id,
+        imageId: uploadedFile.$id,
         location: post.location,
         tags: tags,
       },
@@ -275,3 +275,4 @@ export async function getPostById(postId: string) {
     console.log(error);
   }
 }
+
