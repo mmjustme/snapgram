@@ -6,7 +6,7 @@ import { useState } from "react";
 
 const Explore = () => {
   const { data: posts, fetchNextPage, hasNextPage } = useGetPosts();
-  console.log(posts, "1");
+
   const [searchValue, setSearchValue] = useState("");
   // help avoid requst data to server every mlsek onChange fn
   // and optimise app in general
@@ -62,7 +62,7 @@ const Explore = () => {
       </div>
       <div className="flex flex-wrap gap-9 w-full max-w-5xl">
         {shouldShowSearchResult ? (
-          <SearchResults />
+          <SearchResults isSearchFetching={isSearchFetching} searchedPost={serachedPosts} />
         ) : shouldShowPosts ? (
           <p className="tex-light-4 mt-10 text-center w-full">End of posts</p>
         ) : (
