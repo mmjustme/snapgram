@@ -30,7 +30,10 @@ const Home = () => {
               {posts.pages.map((post, i) => (
                 <React.Fragment key={i}>
                   {post?.documents.map((item) => (
-                    <li className="flex justify-center w-full">
+                    <li
+                      className="flex justify-center w-full"
+                      key={item.caption}
+                    >
                       <PostCard post={item} />
                     </li>
                   ))}
