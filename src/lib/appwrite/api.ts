@@ -195,7 +195,7 @@ export async function getRecentPosts() {
   const posts = await databases.listDocuments(
     appwriteConfig.databaseId,
     appwriteConfig.postCollectionId,
-    [Query.orderDesc("$createdAt"), Query.limit(20)],
+    [Query.orderDesc("$createdAt"), Query.limit(5)],
   );
 
   if (!posts) throw Error;
@@ -342,7 +342,7 @@ export async function deletePost(postId: string, imageId: string) {
 }
 
 export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
-  const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(10)];
+  const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(5)];
 
   if (pageParam) {
     // mean skip 1 page and give me next
