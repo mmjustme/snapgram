@@ -14,6 +14,7 @@ import {
   getInfinitePosts,
   getPostById,
   getRecentPosts,
+  getUserById,
   likePost,
   savePost,
   searchPosts,
@@ -148,6 +149,7 @@ export const useDeleteSavedPost = () => {
     },
   });
 };
+
 export const useGetCurrentUser = () => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_CURRENT_USER],
@@ -162,6 +164,14 @@ export const useGetPostById = (postId: string) => {
     // enabled fn add posibility not get data if postId same
     // mean it will fetch new data if only postId changed
     enabled: !!postId,
+  });
+};
+
+export const useGetUserById = (userId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_USER_BY_ID, userId],
+    queryFn: () => getUserById(userId),
+    enabled: !!userId,
   });
 };
 

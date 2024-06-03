@@ -276,6 +276,22 @@ export async function getPostById(postId: string) {
   }
 }
 
+export async function getUserById(userId: string) {
+  try {
+    const user = await databases.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      userId,
+    );
+
+    if (!user) throw Error;
+
+    return user;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export async function updatePost(post: IUpdatePost) {
   // need understand if we update File or string data
   const hasFileToUpdate = post.file.length > 0;
