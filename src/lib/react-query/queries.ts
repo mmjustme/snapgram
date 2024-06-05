@@ -218,7 +218,7 @@ export const useGetPosts = () => {
 };
 export const useGetInfiniteUserPosts = (userId: string) => {
   return useInfiniteQuery({
-    queryKey: [QUERY_KEYS.GET_INFINITE_USER_POSTS],
+    queryKey: [QUERY_KEYS.GET_INFINITE_USER_POSTS, userId],
     queryFn: getInfiniteUserPosts,
     initialPageParam: { userId, pageParams: 0 },
     getNextPageParam: (lastPage) => {

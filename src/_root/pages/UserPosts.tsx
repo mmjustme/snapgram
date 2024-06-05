@@ -18,8 +18,6 @@ const UserPosts = ({ userId }: UserPostsProps) => {
     isPending: isPostLoading,
   } = useGetInfiniteUserPosts(userId);
 
-  console.log(posts, "userPosts");
-
   useEffect(() => {
     if (inView) fetchNextPage();
   }, [inView]);

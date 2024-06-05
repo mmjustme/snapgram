@@ -392,7 +392,7 @@ export async function getInfiniteUserPosts({
   const queries: any[] = [
     Query.search("creatorId", pageParam.userId),
     Query.orderDesc("$updatedAt"),
-    Query.limit(3),
+    Query.limit(5),
   ];
 
   if (pageParam.lastId) {
