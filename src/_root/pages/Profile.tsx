@@ -10,8 +10,10 @@ import {
 // import { LikedPosts } from "@/_root/pages";
 import { useUserContext } from "@/context/AuthContext";
 import { useGetUserById } from "@/lib/react-query/queries";
-import { GridPostList, Loader } from "@/components/shared";
+import { Loader } from "@/components/shared";
 import { Button } from "@/components/ui/button";
+
+import UserPosts from "./UserPosts";
 
 interface StabBlockProps {
   value: string | number;
@@ -133,10 +135,7 @@ const Profile = () => {
       )}
 
       <Routes>
-        <Route
-          index
-          element={<GridPostList posts={currentUser.posts} showUser={false} />}
-        />
+        <Route index element={<UserPosts userId={id?.toString() || ""} />} />
         {/* {currentUser.$id === user.id && (
           // <Route path="/liked-posts" element={<LikedPosts />} />
         )} */}
