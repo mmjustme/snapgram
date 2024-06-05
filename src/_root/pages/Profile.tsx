@@ -7,13 +7,11 @@ import {
   useLocation,
 } from "react-router-dom";
 
-// import { LikedPosts } from "@/_root/pages";
+import { LikedPosts, UserPosts } from "@/_root/pages";
 import { useUserContext } from "@/context/AuthContext";
 import { useGetUserById } from "@/lib/react-query/queries";
 import { Loader } from "@/components/shared";
 import { Button } from "@/components/ui/button";
-
-import UserPosts from "./UserPosts";
 
 interface StabBlockProps {
   value: string | number;
@@ -136,9 +134,9 @@ const Profile = () => {
 
       <Routes>
         <Route index element={<UserPosts userId={id?.toString() || ""} />} />
-        {/* {currentUser.$id === user.id && (
-          // <Route path="/liked-posts" element={<LikedPosts />} />
-        )} */}
+        {currentUser.$id === user.id && (
+          <Route path="/liked-posts" element={<LikedPosts />} />
+        )}
       </Routes>
       <Outlet />
     </div>
