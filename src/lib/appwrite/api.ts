@@ -360,9 +360,6 @@ export async function deletePost(postId: string, imageId: string) {
 export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
   const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(5)];
 
-  console.log(pageParam, "PageParam api home");
-  console.log(Boolean(pageParam), "PageParam api home");
-
   if (pageParam) {
     // mean skip 1 page and give me next
     queries.push(Query.cursorAfter(pageParam.toString()));
@@ -376,7 +373,6 @@ export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
     );
 
     if (!posts) throw Error;
-    console.log(posts, "API");
 
     return posts;
   } catch (error) {
@@ -408,7 +404,6 @@ export async function getInfiniteUserPosts({
     );
 
     if (!userPosts) throw Error;
-    console.log(userPosts, "userPosts api");
 
     return userPosts;
   } catch (error) {
