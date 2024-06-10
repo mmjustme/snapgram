@@ -9,6 +9,14 @@ export const SignupValidaton = z.object({
     .min(8, { message: "Password must be at least 8 characters" }),
 });
 
+export const ProfileUpdateValidation = z.object({
+  file: z.custom<File[]>(),
+  name: z.string().min(2, { message: "Too short" }),
+  username: z.string().min(2, { message: "Too short" }),
+  email: z.string().email(),
+  bio:z.string()
+});
+
 export const SigninValidation = z.object({
   email: z.string().email(),
   password: z.string().min(8, { message: "Password must be at least 8 characters" }),
@@ -20,3 +28,5 @@ export const PostValidation = z.object({
   location: z.string().min(2).max(100),
   tags: z.string(),
 })
+
+

@@ -13,25 +13,36 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
+import { ProfileUploader } from "@/components/shared";
+import { useParams } from "react-router-dom";
+import { ProfileUpdateValidation } from "@/lib/validation";
+import { useUserContext } from "@/context/AuthContext";
 
-const formSchema = z.object({
-  username: z.string().min(2).max(50),
-});
+
 
 const UpdateProfile = () => {
+  const { id } = useParams()
+  const { user, setUser } = useUserContext()
+  console.log(user);
+
+
   // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof ProfileUpdateValidation>>({
+    resolver: zodResolver(ProfileUpdateValidation),
     defaultValues: {
-      username: "",
+      file:[],
+      username: user?.username,
+      name: user?.name,
+      email: user?.email,
+      bio: user?.bio || '',
     },
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function handleUpdate(values: z.infer<typeof ProfileUpdateValidation>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    console.log(values, "LOL");
   }
   return (
     <div className="flex flex-1">
@@ -49,9 +60,24 @@ const UpdateProfile = () => {
 
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(handleUpdate)}
             className="flex flex-col gap-7 w-full mt-4 max-w-5xl"
           >
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="shad-form_label"></FormLabel>
+                  <FormControl>
+                    <ProfileUploader
+                      mediaUrl={user?.imageUrl}
+                      fieldChange={field.onChange} />
+                  </FormControl>
+                  <FormMessage className="shad-form_message" />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="name"
@@ -72,7 +98,7 @@ const UpdateProfile = () => {
                 <FormItem>
                   <FormLabel className="shad-form_label">Username</FormLabel>
                   <FormControl>
-                    <Input type="text" className="shad-input" {...field} />
+                    <Input type="text" className="shad-input" {...field} disabled />
                   </FormControl>
                   <FormMessage className="shad-form_message" />
                 </FormItem>

@@ -7,3 +7,4 @@ export { default as PostCard } from "./PostCard";
 export { default as Topbar } from "./Topbar";
 export { default as GridPostList } from "./GridPostList";
 export { default as SearchResults } from "./SearchResults";
+export { default as ProfileUploader } from "./ProfileUploader";
