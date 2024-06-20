@@ -182,7 +182,7 @@ const UpdateProfile = () => {
                 type="submit"
                 className="shad-button_primary whitespace-nowrap px-5 py-3"
               >
-                Update Profile
+                {isUpdating ? <Loader /> : "Update Profile"}
               </Button>
             </div>
           </form>
