@@ -14,15 +14,24 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader, ProfileUploader } from "@/components/shared";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ProfileUpdateValidation } from "@/lib/validation";
 import { useUserContext } from "@/context/AuthContext";
-import { useEffect } from "react";
+
+import {
+  useGetCurrentUser,
+  useUpdateUserProfile,
+} from "@/lib/react-query/queries";
+import { toast } from "@/components/ui/use-toast";
 
 const UpdateProfile = () => {
   const { id } = useParams();
   const { user, setUser } = useUserContext();
-  console.log(user, "USER");
+  const navigate = useNavigate();
+
+  const { data: currentUser } = useGetCurrentUser(id || "");
+  const { mutateAsync: updateUser, isPending: isUpdating } =
+    useUpdateUserProfile();
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof ProfileUpdateValidation>>({
@@ -36,12 +45,43 @@ const UpdateProfile = () => {
     },
   });
 
-  // 2. Define a submit handler.
-  function handleUpdate(values: z.infer<typeof ProfileUpdateValidation>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    // console.log(values, "LOL");
+  if (!currentUser) {
+    return (
+      <div className="flex-center w-full h-full">
+        <Loader />
+      </div>
+    );
   }
+
+  // 2. Define a submit handler.
+  const handleUpdate = async (
+    values: z.infer<typeof ProfileUpdateValidation>,
+  ) => {
+    // Do something with the form values.
+    const updatedProfile = await updateUser({
+      name: values.name,
+      bio: values.bio,
+      file: values.file,
+      imageUrl: currentUser.imageUrl,
+      imageId: currentUser.imageId,
+      userId: currentUser.$id,
+    });
+
+    if (!updatedProfile) {
+      toast({
+        title: `Update user failed. Please try again.`,
+      });
+    }
+
+    setUser({
+      ...user,
+      name: updatedProfile?.name,
+      bio: updatedProfile?.bio,
+      imageUrl: updatedProfile?.imageUrl,
+    });
+    return navigate(`/profile/${id}`);
+  };
+
   return (
     <div className="flex flex-1">
       <div className="common-container">
