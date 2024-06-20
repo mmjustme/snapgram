@@ -429,6 +429,7 @@ export async function searchPosts(searchTerm: string) {
 
 export async function updateUserProfile(user: IUpdateUser) {
   try {
+    // chekc if file will update
     const hasFileToUpdate = user.file.length > 0;
     let image = {
       imageUrl: user.imageUrl,
@@ -436,15 +437,17 @@ export async function updateUserProfile(user: IUpdateUser) {
     };
 
     if (hasFileToUpdate) {
+      // upload file to storage
       const uploadedFile = await uploadFile(user.file[0]);
       if (!uploadedFile) throw Error;
 
+      // get URL image
       const fileUrl = getFilePreview(uploadedFile.$id);
       if (!fileUrl) {
         await deleteFile(uploadedFile.$id);
         throw Error;
       }
-
+      // set new image id & url
       image = { ...image, imageUrl: fileUrl, imageId: uploadedFile.$id };
     }
 
@@ -460,7 +463,7 @@ export async function updateUserProfile(user: IUpdateUser) {
       },
     );
 
-    //if failed to update
+    // if failed to update
     if (!updatedProfile) {
       // Delete new file that has been recently uploaded
       if (hasFileToUpdate) {
@@ -470,10 +473,11 @@ export async function updateUserProfile(user: IUpdateUser) {
       throw Error;
     }
 
-    // Safely delete old file after successful update
+    // Safely delete old file img after successful update
     if (user.imageId && hasFileToUpdate) {
       await deleteFile(user.imageId);
     }
+    return updatedProfile;
   } catch (error) {
     console.log(error);
   }
