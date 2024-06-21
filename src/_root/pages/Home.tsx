@@ -1,5 +1,6 @@
 import { Loader, PostCard } from "@/components/shared";
 import { useGetPosts } from "@/lib/react-query/queries";
+import { Models } from "appwrite";
 
 import React, { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
@@ -28,9 +29,9 @@ const Home = () => {
             <Loader />
           ) : (
             <ul className="flex flex-col flex-1 gap-9 w-full">
-              {posts.pages.map((post, i) => (
+              {posts?.pages.map((post, i) => (
                 <React.Fragment key={i}>
-                  {post?.documents.map((item) => (
+                  {post?.documents.map((item: Models.Document) => (
                     <li
                       className="flex justify-center w-full"
                       key={item.caption}
