@@ -15,7 +15,6 @@ const UserPosts = ({ userId }: UserPostsProps) => {
     data: posts,
     fetchNextPage,
     hasNextPage,
-    isPending: isPostLoading,
   } = useGetInfiniteUserPosts(userId);
 
   useEffect(() => {

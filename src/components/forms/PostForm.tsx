@@ -35,7 +35,6 @@ const PostForm = ({ post, action }: PostFormProps) => {
     useCreatePost();
   const { mutateAsync: updatePost, isPending: isLoadingUpdate } =
     useUpdatePost();
-  const { mutateAsync: deletePost } = useDeletePost();
 
   const { user } = useUserContext();
   const { toast } = useToast();
