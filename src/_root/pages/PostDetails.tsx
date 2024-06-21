@@ -30,7 +30,7 @@ const PostDetails = () => {
                     "/assets/icons/profile-placeholder.svg"
                   }
                   alt="creator"
-                  className="rounded-full w-10 lg:h-12 lg:w-12"
+                  className="w-10 h-10 rounded-full lg:h-12 lg:w-12 object-cover"
                 />
 
                 <div className="flex flex-col">
@@ -70,7 +70,7 @@ const PostDetails = () => {
                     src="/assets/icons/delete.svg"
                     alt="delete"
                     width={24}
-                    height={24}
+                    height={24}                    
                   />
                 </Button>
               </div>
