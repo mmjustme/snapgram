@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
 const Explore = () => {
-  const { ref, inView, entry } = useInView();
+  const { ref, inView } = useInView();
 
   const { data: posts, fetchNextPage, hasNextPage } = useGetPosts();
 
@@ -14,15 +14,14 @@ const Explore = () => {
   // help avoid requst data to server every mlsek onChange fn
   // and optimise app in general
   const debouncedValue = useDebounce(searchValue, 500);
-  const { data: serachedPosts, isFenching: isSearchFetching } =
+  const { data: serachedPosts, isFetching: isSearchFetching } =
     useSearchPosts(debouncedValue);
 
   useEffect(() => {
     if (inView && !searchValue) {
-      fetchNextPage()
+      fetchNextPage();
     }
-  }, [inView, searchValue])
-
+  }, [inView, searchValue]);
 
   if (!posts) {
     return (
@@ -72,12 +71,15 @@ const Explore = () => {
       </div>
       <div className="flex flex-wrap gap-9 w-full max-w-5xl">
         {shouldShowSearchResult ? (
-          <SearchResults isSearchFetching={isSearchFetching} searchedPost={serachedPosts} />
+          <SearchResults
+            isSearchFetching={isSearchFetching}
+            searchedPost={serachedPosts}
+          />
         ) : shouldShowPosts ? (
           <p className="tex-light-4 mt-10 text-center w-full">End of posts</p>
         ) : (
           posts.pages.map((item, index) => (
-            <GridPostList key={`page-${index}`} posts={item.documents} />
+            <GridPostList key={`page-${index}`} posts={item?.documents} />
           ))
         )}
       </div>
