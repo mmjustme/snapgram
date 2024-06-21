@@ -49,6 +49,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
       file: [],
       location: post ? post?.location : "",
       tags: post ? post?.tags.join(",") : "",
+      creatorId: "",
     },
   });
 
