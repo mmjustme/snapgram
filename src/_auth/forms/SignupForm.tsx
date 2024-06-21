@@ -16,17 +16,21 @@ import { SignupValidaton } from "@/lib/validation";
 import Loader from "@/components/shared/Loader";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
-import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queries";
+import {
+  useCreateUserAccount,
+  useSignInAccount,
+} from "@/lib/react-query/queries";
 import { useUserContext } from "@/context/AuthContext";
 
 const SignupForm = () => {
   const { toast } = useToast();
-  const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
+  const { checkAuthUser } = useUserContext();
   const navigate = useNavigate();
 
   // react-query mutation fn call
-  const { mutateAsync: createUserAccount, isPending: isCreatingUser } = useCreateUserAccount()
-  const { mutateAsync: signInAccount, isPending: isSigningIn } = useSignInAccount()
+  const { mutateAsync: createUserAccount, isPending: isCreatingUser } =
+    useCreateUserAccount();
+  const { mutateAsync: signInAccount } = useSignInAccount();
 
   // shsdcn form - define form and validation
   const form = useForm<z.infer<typeof SignupValidaton>>({
@@ -53,8 +57,8 @@ const SignupForm = () => {
 
     const session = await signInAccount({
       email: values.email,
-      password: values.password
-    })
+      password: values.password,
+    });
 
     if (!session) {
       // If we failed to create user we'll see a toast
@@ -70,8 +74,6 @@ const SignupForm = () => {
     } else {
       return toast({ title: "Sign up failed. Please try again" });
     }
-
-    
   }
 
   return (
