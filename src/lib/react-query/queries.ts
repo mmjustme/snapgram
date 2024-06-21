@@ -243,12 +243,12 @@ export const useGetInfiniteUserPosts = (userId: string) => {
   return useInfiniteQuery({
     queryKey: [QUERY_KEYS.GET_INFINITE_USER_POSTS, userId],
     queryFn: getInfiniteUserPosts as any,
-    initialPageParam: { userId, pageParams: 0 },
     getNextPageParam: (lastPage: any) => {
       if (lastPage && lastPage.documents.length === 0) return null;
       const lastId = lastPage?.documents[lastPage.documents.length - 1].$id;
       return { userId, lastId };
     },
+    initialPageParam: { userId },
   });
 };
 
