@@ -248,7 +248,7 @@ export const useGetInfiniteUserPosts = (userId: string) => {
       const lastId = lastPage?.documents[lastPage.documents.length - 1].$id;
       return { userId, lastId };
     },
-    initialPageParam: { userId },
+    initialPageParam: { userId,lastId: null  },
   });
 };
 
