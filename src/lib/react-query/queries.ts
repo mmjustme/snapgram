@@ -1,5 +1,4 @@
 import {
-  useQueries,
   useMutation,
   useQueryClient,
   useInfiniteQuery,
@@ -114,7 +113,7 @@ export const useSavePost = () => {
   return useMutation({
     mutationFn: ({ postId, userId }: { postId: string; userId: string }) =>
       savePost(postId, userId),
-    onSuccess: (data) => {
+    onSuccess: () => {
       // recenet posts - home page
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
@@ -136,7 +135,7 @@ export const useDeleteSavedPost = () => {
 
   return useMutation({
     mutationFn: (savedRecordId: string) => deleteSavedPost(savedRecordId),
-    onSuccess: (data) => {
+    onSuccess: () => {
       // recenet posts - home page
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
@@ -173,7 +172,7 @@ export const useUpdateUserProfile = () => {
     mutationFn: (user: IUpdateUser) => updateUserProfile(user),
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_POST_BY_ID, data.$id],
+        queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id],
       });
     },
   });

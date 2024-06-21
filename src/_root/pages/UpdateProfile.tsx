@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -29,7 +28,7 @@ const UpdateProfile = () => {
   const { user, setUser } = useUserContext();
   const navigate = useNavigate();
 
-  const { data: currentUser } = useGetCurrentUser(id || "");
+  const { data: currentUser } = useGetCurrentUser();
   const { mutateAsync: updateUser, isPending: isUpdating } =
     useUpdateUserProfile();
 
