@@ -230,20 +230,21 @@ export const useDeletePost = () => {
 export const useGetPosts = () => {
   return useInfiniteQuery({
     queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
-    queryFn: getInfinitePosts,
-    getNextPageParam: (lastPage) => {
+    queryFn: getInfinitePosts as any,
+    getNextPageParam: (lastPage: any) => {
       if (lastPage && lastPage.documents.length === 0) return null;
       const lastId = lastPage?.documents[lastPage.documents.length - 1].$id;
       return lastId;
     },
+    initialPageParam: null,
   });
 };
 export const useGetInfiniteUserPosts = (userId: string) => {
   return useInfiniteQuery({
     queryKey: [QUERY_KEYS.GET_INFINITE_USER_POSTS, userId],
-    queryFn: getInfiniteUserPosts,
+    queryFn: getInfiniteUserPosts as any,
     initialPageParam: { userId, pageParams: 0 },
-    getNextPageParam: (lastPage) => {
+    getNextPageParam: (lastPage: any) => {
       if (lastPage && lastPage.documents.length === 0) return null;
       const lastId = lastPage?.documents[lastPage.documents.length - 1].$id;
       return { userId, lastId };
