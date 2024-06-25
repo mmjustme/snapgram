@@ -92,8 +92,8 @@ export async function getCurrentUser() {
 
 // signOut
 export async function signOutAccount() {
-  try {    
-    const session = await account.deleteSession("current");    
+  try {
+    const session = await account.deleteSession("current");
 
     return session;
   } catch (error) {
@@ -133,6 +133,7 @@ export async function CreatePost(post: INewPost) {
         imageId: uploadedFile.$id,
         location: post.location,
         tags: tags,
+        creatorId: post.creatorId,
       },
     );
 
@@ -386,7 +387,7 @@ export async function getInfiniteUserPosts({
   pageParam: { lastId: string; userId: string };
 }) {
   const queries: any[] = [
-    Query.search("creatorId", pageParam.userId),
+    Query.equal("creatorId", [`${pageParam.userId}`]),
     Query.orderDesc("$updatedAt"),
     Query.limit(4),
   ];

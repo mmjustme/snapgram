@@ -28,6 +28,7 @@ export type INewPost = {
   file: File[];
   location?: string;
   tags?: string;
+  creatorId: string;
 };
 
 export type IUpdatePost = {

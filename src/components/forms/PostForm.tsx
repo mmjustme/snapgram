@@ -70,6 +70,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
       ...values,
       // userId - it'll be creator in api(mean DB)
       userId: user.id,
+      creatorId: user.id,
     });
 
     if (!newPost) {
