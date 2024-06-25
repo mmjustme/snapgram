@@ -1,15 +1,21 @@
 import { Loader, PostStats } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/AuthContext";
-import { useGetPostById } from "@/lib/react-query/queries";
+import { useDeletePost, useGetPostById } from "@/lib/react-query/queries";
 import { multiFormatDateString } from "@/lib/utils";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const PostDetails = () => {
   const { id } = useParams();
   const { user } = useUserContext();
+  const navigate = useNavigate();
   const { data: post, isPending } = useGetPostById(id || "");
-  const handleDeletePost = () => {};
+  const { mutate: deletePost } = useDeletePost();
+
+  const handleDeletePost = () => {
+    deletePost({ postId: `${id}`, imageId: post?.imageId });
+    navigate("/");
+  };
 
   return (
     <div className="post_details-container">
@@ -62,7 +68,7 @@ const PostDetails = () => {
                   />
                 </Link>
                 <Button
-                  onClick={() => handleDeletePost}
+                  onClick={handleDeletePost}
                   variant="ghost"
                   className={`'ghost_details-delete_btn' ${user.id !== post?.creator.$id && "hidden"}`}
                 >
@@ -70,7 +76,7 @@ const PostDetails = () => {
                     src="/assets/icons/delete.svg"
                     alt="delete"
                     width={24}
-                    height={24}                    
+                    height={24}
                   />
                 </Button>
               </div>
