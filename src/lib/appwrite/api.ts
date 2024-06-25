@@ -332,8 +332,15 @@ export async function updatePost(post: IUpdatePost) {
     );
 
     if (!updatedPost) {
-      await deleteFile(post.imageId);
+      if (hasFileToUpdate) {
+        await deleteFile(image.imageId);
+      }
+
       throw Error;
+    }
+
+    if (hasFileToUpdate) {
+      await deleteFile(post.imageId);
     }
 
     return updatedPost;
@@ -346,11 +353,14 @@ export async function deletePost(postId: string, imageId: string) {
   if (!postId || !imageId) throw Error;
 
   try {
-    await databases.deleteDocument(
+    const status = await databases.deleteDocument(
       appwriteConfig.databaseId,
       appwriteConfig.postCollectionId,
       postId,
     );
+    if (!status) throw Error;
+
+    await deleteFile(imageId);
 
     return { status: "ok" };
   } catch (error) {
